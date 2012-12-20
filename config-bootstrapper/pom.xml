@@ -6,8 +6,8 @@
     <groupId>com.chilmers.config-bootstrapper</groupId>
     <artifactId>config-bootstrapper</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>config</name>
-    <url>http://maven.apache.org</url>
+    <name>config-bootsrapper</name>
+    <url>http://www.github.com/chilmers/config-bootstrapper</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
