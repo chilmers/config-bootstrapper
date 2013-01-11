@@ -25,6 +25,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
 
@@ -204,6 +205,11 @@ public class ConfigServletContextListener implements ServletContextListener {
     private static final String OVERRIDE_DEFAULT_LOG4J_CONFIG_LOCATION_PROPERTY_KEY_PARAM = "configServletContextListener.log4jConfigLocationPropertyKey";    
     
     /**
+     * Prefix for system properties found in the application configuration file
+     */
+    private static final String CONFIG_SYSTEM_PROPERTY_PREFIX = "system.property.";
+    
+    /**
      * The location of the application configuration, to fall back on if the application configuration location
      * was not set by other means. 
      * 
@@ -266,8 +272,14 @@ public class ConfigServletContextListener implements ServletContextListener {
      */
     public void contextInitialized(ServletContextEvent sce) {
         overrideDefaults(sce.getServletContext());
-        setApplicationConfigurationLocation(sce.getServletContext());
-        loadLoggingConfiguration();
+        String configLocation = getApplicationConfigurationLocation(sce.getServletContext());
+        setSystemProperty(this.configLocationPropertyKey, configLocation);        
+        
+        PropertyResourceBundle config = getApplicationConfiguration(configLocation);
+        if(config != null){
+            loadApplicationConfigurationSystemProperties(config);
+            loadLoggingConfiguration(config);    
+        }
     }
     
     private void overrideDefaults(ServletContext ctx) {
@@ -308,7 +320,7 @@ public class ConfigServletContextListener implements ServletContextListener {
      * By default the location will be set in the property with key "application.config.location" but this 
      * can be overridden by configuration
      */
-    private void setApplicationConfigurationLocation(ServletContext ctx) {
+    private String getApplicationConfigurationLocation(ServletContext ctx) {
         logToSystemOut("Servlet context initialized, checking for configuration location parameters...");
         logToSystemOut("Checking for system property " + this.configLocationPropertyKey);
         String configLocation = System.getProperty(this.configLocationPropertyKey);
@@ -325,9 +337,71 @@ public class ConfigServletContextListener implements ServletContextListener {
                     "using fallback configuration location: " + this.fallbackConfigLocation);
             configLocation = this.fallbackConfigLocation;
         } 
-        logToSystemOut("Setting system property " + this.configLocationPropertyKey + " " +
-        		"to the following configuration location: " + configLocation);
-        System.setProperty(this.configLocationPropertyKey, configLocation);
+        
+        return configLocation;
+    }
+    
+    protected void setSystemProperty(String key, String value){
+        logToSystemOut("Setting system property " + key + " " +
+                "to the following value: " + value);
+        System.setProperty(key, value);
+    }
+    
+    /**
+     * Reads the application configuration file  
+     * 
+     * @param applicationConfigLocation The location of the application configuration
+     * @return application configuration properties
+     */
+    protected PropertyResourceBundle getApplicationConfiguration(String applicationConfigLocation) {
+        InputStream is = null;
+        try {
+            if (applicationConfigLocation.startsWith("classpath:")) {
+                applicationConfigLocation = applicationConfigLocation.replaceFirst("classpath:", "");
+                is = Thread.currentThread().getContextClassLoader().getResourceAsStream(applicationConfigLocation); 
+            } else {
+                is = new FileInputStream(applicationConfigLocation);    
+            }
+            return new PropertyResourceBundle(is);
+            
+        } catch (Exception e) {
+            logToSystemOut("There was a problem reading the application configuration at location: " 
+                    + applicationConfigLocation +"\n"
+                    + "Exception:" + e.getClass().toString() + "\n"
+                    + "Message:" + e.getMessage());
+        } finally {
+            try {
+                is.close();
+            } catch (Exception e) {
+                logToSystemOut("WARNING! Exception while trying to close configuration file.\n"
+                        + "Exception:" + e.getClass().toString() + "\n"
+                        + "Message:" + e.getMessage());
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Loads system properties from the application configuration
+     *  
+     * @param configBundle The application configuration
+     */
+    protected void loadApplicationConfigurationSystemProperties(PropertyResourceBundle configBundle){
+        logToSystemOut("Checking for system properties in application configuration");
+        Enumeration<String> keys = configBundle.getKeys();
+         
+        while(keys.hasMoreElements()){
+            
+            String key = keys.nextElement();
+            
+            if(key.startsWith(CONFIG_SYSTEM_PROPERTY_PREFIX)){
+                String systemPropertyKey = key.substring(CONFIG_SYSTEM_PROPERTY_PREFIX.length());
+                
+                if(systemPropertyKey.length() > 0){
+                    setSystemProperty(systemPropertyKey, configBundle.getString(key));
+                }
+            }
+        }
     }
     
     /**
@@ -341,39 +415,18 @@ public class ConfigServletContextListener implements ServletContextListener {
      * configuration mechanism will be used, e.g. it will look for log4j.xml 
      * or log4j.properties on the classpath.
      */
-    private void loadLoggingConfiguration() {
+    private void loadLoggingConfiguration(PropertyResourceBundle configBundle) {
         logToSystemOut("Finding log4j configuration location in application configuration...");
-        String applicationConfigLocation = System.getProperty(this.configLocationPropertyKey);
+        
         String log4jConfigLocation = null;
-        InputStream is = null;
+        
         try {
-            if (applicationConfigLocation.startsWith("classpath:")) {
-                applicationConfigLocation = applicationConfigLocation.replaceFirst("classpath:", "");
-                is = Thread.currentThread().getContextClassLoader().getResourceAsStream(applicationConfigLocation); 
-            } else {
-                is = new FileInputStream(applicationConfigLocation);    
-            }
-            PropertyResourceBundle bundle = new PropertyResourceBundle(is);
-            try {
-                log4jConfigLocation = bundle.getString(this.log4jConfigLocationPropertyKey);
-            } catch (MissingResourceException e) {
-                logToSystemOut("No log4j configuration location was found for property " + 
-                        this.log4jConfigLocationPropertyKey + " in the application configuration. ");
-            }
-        } catch (Exception e) {
-            logToSystemOut("There was a problem reading the application configuration at location: " 
-                    + applicationConfigLocation +"\n"
-                    + "Exception:" + e.getClass().toString() + "\n"
-                    + "Message:" + e.getMessage());
-        } finally {
-            try {
-                is.close();
-            } catch (Exception e) {
-                logToSystemOut("WARNING! Exception while trying to close configuration file.\n"
-                		+ "Exception:" + e.getClass().toString() + "\n"
-                		+ "Message:" + e.getMessage());
-            }
+            log4jConfigLocation = configBundle.getString(this.log4jConfigLocationPropertyKey);
+        } catch (MissingResourceException e) {
+            logToSystemOut("No log4j configuration location was found for property " + 
+                    this.log4jConfigLocationPropertyKey + " in the application configuration. ");
         }
+    
         if (StringUtils.isNotBlank(log4jConfigLocation)) {
             LogManager.resetConfiguration();
             logToSystemOut("Found log4j configuration location in the application configuration. " +
@@ -392,7 +445,7 @@ public class ConfigServletContextListener implements ServletContextListener {
         }
         log.info("Log4j was configured, see System.out log for initialization information.");
     }
-    
+
     /**
      * Destroys the servlet context and shutting down the Log Manager 
      * which in turn is stopping Log4j's watch dog thread.
