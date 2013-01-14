@@ -61,7 +61,7 @@ import org.apache.log4j.xml.DOMConfigurator;
  * This context listener will in the given order look in the system properties, environment variables<br/>
  * or the servlet context parameters for the location of a configuration file to use in the application.<br/>
  * By default it will look for an entry with the key "application.config.location". (This key name can be overridden, see Overriding defaults below)<br/>
- * If no such entry is found it will by default fall back to using "classpath:/application.properties" as configuration location. (The fallback location can also be overridden if necessary, see below)<br/>
+ * If no such entry is found it will by default fall back to using "classpath:application.properties" as configuration location. (The fallback location can also be overridden if necessary, see below)<br/>
  * <br/>
  * Whichever configuration location string is decided, will be set in the system properties using the same key as above, 
  * i.e by default it will be set in system property "application.config.location"<br/> 
@@ -99,7 +99,7 @@ import org.apache.log4j.xml.DOMConfigurator;
  *  &lt;/listener&gt;
  * </pre>
  * 
- * If you want to specify an external configuration file (instead of the default "classpath:/application.properties"), <br/>
+ * If you want to specify an external configuration file (instead of the default "classpath:application.properties"), <br/>
  * add a context-param or more likely a system property or environment variable stating the location of your application configuration. <br/> 
  * For example:<br/>
  * <br/>
@@ -107,7 +107,7 @@ import org.apache.log4j.xml.DOMConfigurator;
  *  <pre>
  *  &lt;context-param&gt;
  *      &lt;description&gt;The location of the application configuration. 
- *          If not set it defaults to classpath:/application.properties&lt;/description&gt;
+ *          If not set it defaults to classpath:application.properties&lt;/description&gt;
  *      &lt;param-name&gt;application.config.location&lt;/param-name&gt;
  *      &lt;param-value&gt;/Users/myusername/my-app-config/app.properties&lt;/param-value&gt;
  *  &lt;/context-param&gt;
@@ -145,9 +145,9 @@ import org.apache.log4j.xml.DOMConfigurator;
  *  &lt;context-param&gt;
  *      &lt;description&gt;Sets the location of the application configuration to fall back to if no other configuration
  *          file location was set. E.g. a bundled configuration on the classpath. 
- *          If not set it defaults to classpath:/application.properties&lt;/description&gt;
+ *          If not set it defaults to classpath:application.properties&lt;/description&gt;
  *      &lt;param-name&gt;configServletContextListener.fallbackConfigLocation&lt;/param-name&gt;
- *      &lt;param-value&gt;classpath:/myown.properties&lt;/param-value&gt;
+ *      &lt;param-value&gt;classpath:myown.properties&lt;/param-value&gt;
  *  &lt;/context-param&gt;
  *  </pre>
  * <pre>
@@ -191,7 +191,7 @@ public class ConfigServletContextListener implements ServletContextListener {
     /**
      * Default value for {@link ConfigServletContextListener#fallbackConfigLocation}
      */    
-    private static final String DEFAULT_FALLBACK_CONFIG_LOCATION = "classpath:/application.properties";
+    private static final String DEFAULT_FALLBACK_CONFIG_LOCATION = "classpath:application.properties";
 
     /**
      * The name of the context param to use for overriding {@link ConfigServletContextListener#fallbackConfigLocation}
@@ -223,9 +223,9 @@ public class ConfigServletContextListener implements ServletContextListener {
      *  &lt;context-param&gt;
      *      &lt;description&gt;Sets the location of the application configuration to fall back to if no other configuration
      *          file location was set. E.g. a bundled configuration on the classpath. 
-     *          If not set it defaults to classpath:/application.properties&lt;/description&gt;
+     *          If not set it defaults to classpath:application.properties&lt;/description&gt;
      *      &lt;param-name&gt;configServletContextListener.fallbackConfigLocation&lt;/param-name&gt;
-     *      &lt;param-value&gt;classpath:/myown.properties&lt;/param-value&gt;
+     *      &lt;param-value&gt;classpath:myown.properties&lt;/param-value&gt;
      *  &lt;/context-param&gt;
      *  </pre>
      */
