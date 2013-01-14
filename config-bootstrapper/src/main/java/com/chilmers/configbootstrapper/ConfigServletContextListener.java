@@ -43,16 +43,57 @@ import org.apache.log4j.xml.DOMConfigurator;
  * <p>
  * Helps initializing logging and application configuration for a system.<br/>
  * <br/>
- * It does two main things:<br/>
+ * 
+ * <h1>Quick start</h1> 
+ * A more comprehensive usage guide is found further down.<br/>
+ * 
+ * Add this to your web.xml before any other listeners that need to use the configuration or that needs to log.<br/>
+ * <pre>
+ *  &lt;listener&gt;
+ *      &lt;listener-class&gt;com.chilmers.configbootstrapper.ConfigServletContextListener&lt;/listener-class&gt;
+ *  &lt;/listener&gt;
+ * </pre>
+ * You can now use the system property "application.config.location" to read your config location, for example to inject your config in Spring.
+ * <pre>
+ *  &lt;context:property-placeholder location="${application.config.location}"/&gt;
+ * </pre>
+ * Or use readApplicationConfiguration in ConfigHelper:<br/>
+ *  See {@link com.chilmers.configbootstrapper.ConfigHelper#readApplicationConfiguration()}
+ * 
+ * 
+ * <h1>Main functionalities:</h1><br/>
  * <ul>
- *  <li> Finds out which application configuration file to use, and sets it as a system property (by default "application.config.location") <br/>
- *      making it possible for the application to use separate configurations for separate environments. <br/>
+ *  <li><strong>Determines which configuration file to use</strong><br/>
+ *      Looks in the given order in system properties, environment variables, and servlet context parameters for the location of a 
+ *      properties file to use for configuration.<br/>
+ *      By default it looks for an entry named <strong>"application.config.location"</strong>. <br/>
+ *      If no such entry was found the location <strong>defaults to classpath:application.properties</strong><br/>
+ *      The location that was determined will be written to the system property (by default "application.config.location").<br/>
+ *      The obvious benefit of doing this is in when no location has been specified, you will still be able to read the configuration
+ *      location from this system property. In other environments where you want to add a configuration on the file system, you can do
+ *      this and add the location as a system property, environment variable or servlet context parameter and still read the location
+ *      from the system property.<br/>
+ *      This makes it easy to use separate configurations for separate environments.
+ *      Use classpath: for files on the classpath and file: to read from an external location.
  *  </li>
- *  <li>    
- *      Loads the logging configuration in a way that makes it possible to<br/> 
- *      use different log4j configurations in different environments.<br/>
+ *  <li><strong>Loads logging (log4J) configuration</strong><br/>
+ *      Uses the given application configuration to specify a location of a log4j configuration file.
+ *      By default it looks for an entry named <strong>"application.log4j.config.location"</strong> in the application configuration.<br/>
+ *      In this way it is easy to provide different logging configurations for different environments.<br/>
+ *      If no specific log4j-configuration is configured, it falls back to log4j's default configuration handling (e.g. log4j.xml or log4j.properties on the classpath)<br/>
  *  </li>
- * <ul>
+ *  <li><strong>Possibility to set system properties from application configuration</strong><br/>
+ *      Entries in the configuration file starting with "system.property." will automatically be written to
+ *      the system properties.<br/>
+ *      Example:
+ *      <br/>
+ *      <pre>
+ *          system.property.foo=bar
+ *      </pre>
+ *      Will write <tt>foo=bar</tt> as a system property, which is handy in some circumstances.<br/>
+ *      Don't use this feature if you don't understand what it is, since it might clutter your system properties.<br/>
+ *  </li>
+ * </ul>
  * </p>
  * <br/>
  * 
@@ -73,10 +114,12 @@ import org.apache.log4j.xml.DOMConfigurator;
  *      &lt;property name="location" value="${application.config.location}" /&gt;
  *  &lt;/bean&gt;
  *  </pre>
- *  Or, if you have the context namespace defined, simply:
+ *  Or, if you have the context namespace defined, simply:<br/>
  *  <pre>
  *  &lt;context:property-placeholder location="${application.config.location}"/&gt;
  *  </pre>
+ *  Or use readApplicationConfiguration in ConfigHelper for non-Spring applications:<br/>
+ *  See {@link com.chilmers.configbootstrapper.ConfigHelper#readApplicationConfiguration()}
  * <br/>
  * <br/> 
  * <b>Logging configuration (i.e. Log4j)</b><br/>
@@ -181,7 +224,7 @@ public class ConfigServletContextListener implements ServletContextListener {
     /**
      * Default value for {@link ConfigServletContextListener#configLocationPropertyKey}
      */
-    private static final String DEFAULT_CONFIG_LOCATION_PROPERTY_KEY = "application.config.location";
+    protected static final String DEFAULT_CONFIG_LOCATION_PROPERTY_KEY = "application.config.location";
     
     /**
      * The name of the context param to use for overriding {@link ConfigServletContextListener#configLocationPropertyKey}
