@@ -13,9 +13,26 @@
     <modules>
       <module>config-bootstrapper</module>
     </modules>
+    
+    <properties>
+      <project.reporting.outputDirectory>${project.basedir}/apidocs</project.reporting.outputDirectory>
+    </properties>
 
     <build>
       <plugins>
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <configuration>
+            <filesets>
+              <fileset>
+                <directory>${project.basedir}/apidocs</directory>
+                <includes>
+                  <include>**</include>
+                </includes>
+              </fileset>
+            </filesets>
+          </configuration>
+        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
