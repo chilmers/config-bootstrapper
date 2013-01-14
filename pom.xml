@@ -6,10 +6,34 @@
     <groupId>com.chilmers.config-bootstrapper</groupId>
     <artifactId>config-bootstrapper-project</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>config-bootstrapper-project</name>
-    <url>http://www.github.com/chilmers/config-bootstrapper</url>
     <packaging>pom</packaging>
     
+    <name>config-bootstrapper-project</name>
+    <url>http://www.github.com/chilmers/config-bootstrapper</url>
+    <description>
+        Top pom of the config-bootstrapper project.
+        The config-bootstrapper helps with configuration of Servlet based Java applications.
+    </description>
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License v2.1</name>
+            <url>http://www.gnu.org/licenses/lgpl-2.1.txt</url>
+        </license>
+    </licenses>
+    
+    <scm>
+        <url>https://github.com/chilmers/config-bootstrapper</url>
+        <connection>scm:git://github.com/chilmers/config-bootstrapper.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:chilmers/config-bootstrapper.git</developerConnection>
+    </scm>
+    
+    <developers>
+        <developer>
+            <name>Christian Hilmersson</name>
+            <url>https://github.com/chilmers</url>
+        </developer>
+    </developers>    
+
     <modules>
       <module>config-bootstrapper</module>
     </modules>
