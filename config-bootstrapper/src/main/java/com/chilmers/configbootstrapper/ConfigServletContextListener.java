@@ -73,6 +73,10 @@ import org.apache.log4j.xml.DOMConfigurator;
  *      &lt;property name="location" value="${application.config.location}" /&gt;
  *  &lt;/bean&gt;
  *  </pre>
+ *  Or, if you have the context namespace defined, simply:
+ *  <pre>
+ *  &lt;context:property-placeholder location="${application.config.location}"/&gt;
+ *  </pre>
  * <br/>
  * <br/> 
  * <b>Logging configuration (i.e. Log4j)</b><br/>
