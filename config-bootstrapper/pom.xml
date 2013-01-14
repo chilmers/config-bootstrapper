@@ -3,14 +3,37 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
     xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.chilmers.config-bootstrapper</groupId>
+    <parent>
+        <groupId>com.chilmers.config-bootstrapper</groupId>
+        <artifactId>config-bootstrapper-project</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
     <artifactId>config-bootstrapper</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <name>config-bootsrapper</name>
+    <packaging>jar</packaging>
+    <name>config-bootstrapper</name>
+    <description>Helps with configuration of Servlet based Java applications.</description>
     <url>http://www.github.com/chilmers/config-bootstrapper</url>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License v2.1</name>
+            <url>http://www.gnu.org/licenses/lgpl-2.1.txt</url>
+        </license>
+    </licenses>
+    
+    <scm>
+        <url>https://github.com/chilmers/config-bootstrapper</url>
+        <connection>scm:git://github.com/chilmers/config-bootstrapper.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:chilmers/config-bootstrapper.git</developerConnection>
+    </scm>
+    
+    <developers>
+        <developer>
+            <name>Christian Hilmersson</name>
+            <url>https://github.com/chilmers</url>
+        </developer>
+    </developers>
+
     <dependencies>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -36,42 +59,5 @@
           <scope>test</scope>
         </dependency>
     </dependencies>
-    <build>
-    	<plugins>
-			<plugin>
-			  <artifactId>maven-compiler-plugin</artifactId>
-			  <version>2.3.2</version>
-			  <configuration>
-			    <optimize>true</optimize>
-			    <debug>true</debug>
-			  </configuration>
-			</plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>attach-sources</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.9</version>
-        <executions>
-          <execution>
-            <id>javadoc</id>
-            <phase>package</phase>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin> 	
-    </plugins>
-    </build>
+
 </project>

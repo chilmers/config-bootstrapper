@@ -34,52 +34,52 @@
         </developer>
     </developers>    
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
     <modules>
       <module>config-bootstrapper</module>
     </modules>
 
     <build>
-      <plugins>
-        <plugin>
-          <artifactId>maven-clean-plugin</artifactId>
-          <configuration>
-            <filesets>
-              <fileset>
-                <directory>${project.basedir}/apidocs</directory>
-                <includes>
-                  <include>**</include>
-                </includes>
-              </fileset>
-            </filesets>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-javadoc-plugin</artifactId>
-          <version>2.9</version>
-          <executions>
-            <execution>
-              <id>aggregate-javadoc</id>
-              <phase>package</phase>
-              <configuration>
-                <outputDirectory>${project.basedir}/apidocs</outputDirectory>
-                <reportOutputDirectory>${project.basedir}/apidocs</reportOutputDirectory>
-                <aggregate>true</aggregate>
-              </configuration>
-              <goals>
-                <goal>aggregate</goal>
-              </goals>
-            </execution>
-          	<execution>
-            	<id>javadoc</id>
-            	<phase>package</phase>
-            	<goals>
-              		<goal>jar</goal>
-            	</goals>
-          	</execution>
-          </executions>
-        </plugin>
-      </plugins>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <optimize>true</optimize>
+                    <debug>true</debug>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9</version>
+                <executions>               
+                    <execution>
+                        <id>javadoc</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                            <goal>aggregate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 
 </project>
