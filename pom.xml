@@ -37,10 +37,6 @@
     <modules>
       <module>config-bootstrapper</module>
     </modules>
-    
-    <properties>
-      <project.reporting.outputDirectory>${project.basedir}/apidocs</project.reporting.outputDirectory>
-    </properties>
 
     <build>
       <plugins>
