@@ -50,6 +50,13 @@
                 <goal>aggregate</goal>
               </goals>
             </execution>
+          	<execution>
+            	<id>javadoc</id>
+            	<phase>package</phase>
+            	<goals>
+              		<goal>jar</goal>
+            	</goals>
+          	</execution>
           </executions>
         </plugin>
       </plugins>
