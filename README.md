@@ -1,6 +1,6 @@
 config-bootstrapper
 ===================
-----
+
 Helps managing application and logging configuration for different environments in Servlet based Java applications.
 
 <h2>Features</h2>
@@ -9,8 +9,6 @@ Helps managing application and logging configuration for different environments 
 * Reloads log4j configuration automatically on configuration changes, when read from file system
 * Uses configuration files on classpath by default (i.e. no need for explicitly stating config files during development)
 * Possiblity to set additional system properties from application configuration file
-
------
 
 <h2>Maven dependency</h2>
 
@@ -22,7 +20,7 @@ Add the following dependency to your pom.xml to get the latest version from Mave
 		&lt;version&gt;1.2&lt;/version&gt;
 	&lt;/dependency&gt;
 </pre>
------
+
 <div class="block">
  <h2>Quick start</h2> 
  A more comprehensive usage guide is found further down.<br>
@@ -149,8 +147,8 @@ Add the following dependency to your pom.xml to get the latest version from Mave
   <pre>export application.config.location=file:/Users/myusername/my-app-config/app.properties</pre>
   <br>
   As a system property upon starting your container:<br>
-  <pre>java [your application] -Dapplication.config.location=file:/Users/myusername/my-app-config/app.properties</pre><br>
-
+  <pre>java [your application] -Dapplication.config.location=file:/Users/myusername/my-app-config/app.properties</pre>
+<br>
  <h2>Overriding defaults</h2>
  The following context-parameters can be set to configure the listener.<br>
  All of them have default values so they don't have to be set if not needed<br>
