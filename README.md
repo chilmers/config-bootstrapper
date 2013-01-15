@@ -18,24 +18,44 @@ Add the following dependency to your pom.xml to get the latest version from Mave
 	&lt;/dependency&gt;
 </pre>
 
-
-<div class="block">
- <h1>Quick start</h1> 
-
- A more comprehensive usage guide is found further down.<br>
+<div class="block">Config Bootstrapper - https://github.com/chilmers/config-bootstrapper/<br>
+        Helps initializing logging and application configuration for a system.<br>
+  This class implements a ServletContextListener and initializes 
+  config-bootstrapper upon servlet context initialization.<br>
+ <br>
  
+ <h1>Quick start</h1> 
+ A more comprehensive usage guide is found further down.<br>
+ <br>
  Add this to your web.xml before any other listeners that need to use the configuration or that needs to log.<br>
- <pre>  &lt;listener&gt;
+<pre>  &lt;listener&gt;
       &lt;listener-class&gt;com.chilmers.configbootstrapper.ConfigServletContextListener&lt;/listener-class&gt;
   &lt;/listener&gt;
- </pre>
+</pre>
  You can now use the system property "application.config.location" to read your config location, for example to inject your config in Spring.
- <pre>  &lt;context:property-placeholder location="${application.config.location}"/&gt;
- </pre>
+<pre>  &lt;context:property-placeholder location="${application.config.location}"/&gt;
+</pre>
  Or use readApplicationConfiguration in ConfigHelper:<br>
-  See <a href="http://htmlpreview.github.com/?https://raw.github.com/chilmers/config-bootstrapper/master/target/site/apidocs/com/chilmers/configbootstrapper/ConfigServletContextListener.html#readApplicationConfiguration()"><code>ConfigHelper.readApplicationConfiguration()</code></a>
+<pre>  See <a href="../../../com/chilmers/configbootstrapper/ConfigHelper.html#readApplicationConfiguration()"><code>ConfigHelper.readApplicationConfiguration()</code></a>
+</pre>
  
- 
+ The application will now read <i>application.properties from the classpath</i>, if you need to read from another location
+ you might specify this with a system property (or environment variable or servlet context parameter) at startup.<br/>
+<br/>For example:
+<pre> mvn jetty:run -Dapplication.config.location=file:/Users/chilmers/myApp/app-config.properties
+</pre>
+ or if you want to read config from classpath (other than application.properties)
+<pre> mvn jetty:run -Dapplication.config.location=classpath:app-config.properties
+</pre>
+
+ At this stage the application will try to find a default log4j configuration file i.e. <i>log4j.xml or log4j.properties on the classpath</i>
+ If you need to change this, add an entry like this to your application configuration file:
+<pre>  application.log4j.config.location=file:/Users/chilmers/myApp/app-log4j.xml
+</pre>
+ or if you want to read logging config from the classpath (other than log4j.xml/log4j.properties)
+<pre>  application.log4j.config.location=classpath:app-log4j.xml
+</pre>
+ <br>
  <h1>Main functionalities:</h1><br>
  <ul>
   <li><strong>Determines which configuration file to use</strong><br>
@@ -91,7 +111,7 @@ Add the following dependency to your pom.xml to get the latest version from Mave
   <pre>  &lt;context:property-placeholder location="${application.config.location}"/&gt;
   </pre>
   Or use readApplicationConfiguration in ConfigHelper for non-Spring applications:<br>
-  See <a href="http://htmlpreview.github.com/?https://raw.github.com/chilmers/config-bootstrapper/master/target/site/apidocs/com/chilmers/configbootstrapper/ConfigServletContextListener.html#readApplicationConfiguration()"><code>ConfigHelper.readApplicationConfiguration()</code></a>
+  See <a href="../../../com/chilmers/configbootstrapper/ConfigHelper.html#readApplicationConfiguration()"><code>ConfigHelper.readApplicationConfiguration()</code></a>
  <br>
  <br> 
  <b>Logging configuration (i.e. Log4j)</b><br>
