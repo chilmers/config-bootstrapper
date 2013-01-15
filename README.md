@@ -18,12 +18,7 @@ Add the following dependency to your pom.xml to get the latest version from Mave
 	&lt;/dependency&gt;
 </pre>
 
-<div class="block">Config Bootstrapper - https://github.com/chilmers/config-bootstrapper/<br>
-        Helps initializing logging and application configuration for a system.<br>
-  This class implements a ServletContextListener and initializes 
-  config-bootstrapper upon servlet context initialization.<br>
- <br>
- 
+<div class="block">
  <h1>Quick start</h1> 
  A more comprehensive usage guide is found further down.<br>
  <br>
