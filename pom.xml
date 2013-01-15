@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    
+	
 	<!-- Parent pom needed to be able to deploy to Sonatype 
 		http://repo1.maven.org/maven2/org/sonatype/oss/oss-parent/7/oss-parent-7.pom -->
   	<parent>
@@ -11,11 +11,11 @@
   	</parent>
 
 	<groupId>com.chilmers.config-bootstrapper</groupId>
-    <artifactId>config-bootstrapper-project</artifactId>
+    <artifactId>config-bootstrapper</artifactId>
     <version>1.2-SNAPSHOT</version>
-    <packaging>pom</packaging>
-    
-    <name>config-bootstrapper-project</name>
+    <packaging>jar</packaging>
+
+    <name>config-bootstrapper</name>
     <url>http://www.github.com/chilmers/config-bootstrapper</url>
     <description>
         Top pom of the config-bootstrapper project.
@@ -45,15 +45,43 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <modules>
-      <module>config-bootstrapper</module>
-    </modules>
+    <dependencies>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.4</version>
+        </dependency>
+        <dependency>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+          <version>4.7</version>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>3.2.0.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>3.0</version>
                 <configuration>
                     <optimize>true</optimize>
                     <debug>true</debug>
@@ -62,6 +90,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
