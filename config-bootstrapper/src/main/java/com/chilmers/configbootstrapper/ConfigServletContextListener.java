@@ -152,15 +152,15 @@ import org.apache.log4j.xml.DOMConfigurator;
  *      &lt;description&gt;The location of the application configuration. 
  *          If not set it defaults to classpath:application.properties&lt;/description&gt;
  *      &lt;param-name&gt;application.config.location&lt;/param-name&gt;
- *      &lt;param-value&gt;/Users/myusername/my-app-config/app.properties&lt;/param-value&gt;
+ *      &lt;param-value&gt;file:/Users/myusername/my-app-config/app.properties&lt;/param-value&gt;
  *  &lt;/context-param&gt;
  *  </pre>
  * <br/>
  *  As environment variable in a bash shell:<br/>
- *  <pre>export application.config.location=/Users/myusername/my-app-config/app.properties</pre>
+ *  <pre>export application.config.location=file:/Users/myusername/my-app-config/app.properties</pre>
  *  <br/>
  *  As a system property upon starting your container:<br/>
- *  <pre>java [your application] -Dapplication.config.location=/Users/myusername/my-app-config/app.properties</pre><br/>
+ *  <pre>java [your application] -Dapplication.config.location=file:/Users/myusername/my-app-config/app.properties</pre><br/>
  * </p>
  * <br/>
  * <b>Overriding defaults</b><br/>
@@ -285,7 +285,7 @@ public class ConfigServletContextListener implements ServletContextListener {
     
     /**
      * This value is the key of a property in the application configuration which holds the log4j configuration file location.
-     * It defaults to "application.log4j.config.location" and can be overriden in by stating a 
+     * It defaults to "application.log4j.config.location" and can be overridden in by stating a 
      * context-param in web.xml like this:
      * 
      * <pre>
@@ -320,6 +320,11 @@ public class ConfigServletContextListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         overrideDefaults(sce.getServletContext());
         String configLocation = getApplicationConfigurationLocation(sce.getServletContext());
+        if (!configLocation.startsWith("classpath:") && !configLocation.startsWith("file:")) {
+            configLocation = "file:" + configLocation;
+            logToSystemOut("The application config location neither starts with classpath: nor file:, " +
+            		"assuming " + configLocation);
+        }
         setSystemProperty(this.configLocationPropertyKey, configLocation);        
         
         PropertyResourceBundle config = getApplicationConfiguration(configLocation);
@@ -406,8 +411,11 @@ public class ConfigServletContextListener implements ServletContextListener {
             if (applicationConfigLocation.startsWith("classpath:")) {
                 applicationConfigLocation = applicationConfigLocation.replaceFirst("classpath:", "");
                 is = Thread.currentThread().getContextClassLoader().getResourceAsStream(applicationConfigLocation); 
-            } else {
+            } else if (applicationConfigLocation.startsWith("file:")) {
+                applicationConfigLocation = applicationConfigLocation.replaceFirst("file:", "");
                 is = new FileInputStream(applicationConfigLocation);    
+            } else {
+                logToSystemOut("The application configuration location must start with file: or classpath:");
             }
             return new PropertyResourceBundle(is);
             
