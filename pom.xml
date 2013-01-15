@@ -31,7 +31,7 @@
     <scm>
         <url>https://github.com/chilmers/config-bootstrapper</url>
         <connection>scm:git://github.com/chilmers/config-bootstrapper.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com:chilmers/config-bootstrapper.git</developerConnection>
+        <developerConnection>scm:git:ssh://git@github.com/chilmers/config-bootstrapper.git</developerConnection>
     </scm>
     
     <developers>
