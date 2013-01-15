@@ -1,14 +1,19 @@
 config-bootstrapper
 ===================
+----
+Helps managing application and logging configuration for different environments in Servlet based Java applications.
 
-Helps separating application and logging configuration for different environments in Servlet based web Java applications.
+<h2>Features</h2>
+* Possibility to have separate application config files per environment
+* Possibility to have separate log4j config files per environment
+* Reloads log4j configuration automatically on configuration changes, when read from file system
+* Uses configuration files on classpath by default (i.e. no need for explicitly stating config files during development)
+* Possiblity to set additional system properties from application configuration file
 
-Config-bootsrapper is licensed under LGPL 2.1 as described in the LICENSE file. <br>
+-----
 
-<a href="http://htmlpreview.github.com/?https://raw.github.com/chilmers/config-bootstrapper/master/target/site/apidocs/com/chilmers/configbootstrapper/ConfigServletContextListener.html">Link to API documentation (javadoc)</a>
+<h2>Maven dependency</h2>
 
-Maven dependency
-===============
 Add the following dependency to your pom.xml to get the latest version from Maven Central Repo.
 <pre>
 	&lt;dependency&gt;
@@ -17,9 +22,9 @@ Add the following dependency to your pom.xml to get the latest version from Mave
 		&lt;version&gt;1.2&lt;/version&gt;
 	&lt;/dependency&gt;
 </pre>
-
+-----
 <div class="block">
- <h1>Quick start</h1> 
+ <h2>Quick start</h2> 
  A more comprehensive usage guide is found further down.<br>
  <br>
  Add this to your web.xml before any other listeners that need to use the configuration or that needs to log.<br>
@@ -51,7 +56,7 @@ Add the following dependency to your pom.xml to get the latest version from Mave
 <pre>  application.log4j.config.location=classpath:app-log4j.xml
 </pre>
  <br>
- <h1>Main functionalities:</h1><br>
+ <h2>Main functionalities</h2><br>
  <ul>
   <li><strong>Determines which configuration file to use</strong><br>
       Looks in the given order in system properties, environment variables, and servlet context parameters for the location of a 
@@ -85,8 +90,7 @@ Add the following dependency to your pom.xml to get the latest version from Mave
  </ul>
  <br>
  
- <b>Finding correct application configuration</b><br>
- <br>
+ <h2>Finding correct application configuration</h2>
  This context listener will in the given order look in the system properties, environment variables<br>
  or the servlet context parameters for the location of a configuration file to use in the application.<br>
  By default it will look for an entry with the key "application.config.location". (This key name can be overridden, see Overriding defaults below)<br>
@@ -109,7 +113,7 @@ Add the following dependency to your pom.xml to get the latest version from Mave
   See <a href="../../../com/chilmers/configbootstrapper/ConfigHelper.html#readApplicationConfiguration()"><code>ConfigHelper.readApplicationConfiguration()</code></a>
  <br>
  <br> 
- <b>Logging configuration (i.e. Log4j)</b><br>
+ <h2>Logging configuration (i.e. Log4j)</h2>
  This mechanism configures Log4j using a given file whose location is stated in the application configuration, 
  or if no such file is available falls back to Log4j's default configuration behavior, <br>
  i.e. looks for log4j.xml or log4j.properties on the classpath.<br>
@@ -120,7 +124,7 @@ Add the following dependency to your pom.xml to get the latest version from Mave
  a property with the key given by "application.log4j.config.location". (This key name can be overriden, see Overriding defaults below)<br>
  <br>
  <br> 
- <b>Usage</b><br>
+ <h2>Usage</h2>
  Add this to your web.xml and make sure it is located before any application specific listeners that need
  to use the configuration location property or that needs to log. E.g. before Spring's ContextLoaderListener<br>
  <pre>  &lt;listener&gt;
@@ -146,9 +150,8 @@ Add the following dependency to your pom.xml to get the latest version from Mave
   <br>
   As a system property upon starting your container:<br>
   <pre>java [your application] -Dapplication.config.location=file:/Users/myusername/my-app-config/app.properties</pre><br>
- <br>
- <br>
- <b>Overriding defaults</b><br>
+
+ <h2>Overriding defaults</h2>
  The following context-parameters can be set to configure the listener.<br>
  All of them have default values so they don't have to be set if not needed<br>
  <pre>  &lt;context-param&gt;
@@ -183,3 +186,9 @@ Add the following dependency to your pom.xml to get the latest version from Mave
       &lt;param-value&gt;My Application&lt;/param-value&gt;
   &lt;/context-param&gt;
   </pre></div>
+
+<h2>License</h2>
+Config-bootsrapper is licensed under LGPL 2.1 as described in the LICENSE file. <br>
+
+<h2>Javadoc</h2>
+<a href="http://htmlpreview.github.com/?https://raw.github.com/chilmers/config-bootstrapper/master/target/site/apidocs/com/chilmers/configbootstrapper/ConfigServletContextListener.html">Link to API documentation (javadoc)</a>
