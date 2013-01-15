@@ -12,7 +12,7 @@
 
 	<groupId>com.chilmers.config-bootstrapper</groupId>
     <artifactId>config-bootstrapper</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
     <packaging>jar</packaging>
 
     <name>config-bootstrapper</name>
