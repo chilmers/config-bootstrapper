@@ -40,8 +40,10 @@ import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.xml.DOMConfigurator;
 
 /**
- * <p>
- * Helps initializing logging and application configuration for a system.<br/>
+ *  Config Bootstrapper - https://github.com/chilmers/config-bootstrapper/<br/>
+ * 	Helps initializing logging and application configuration for a system.<br/>
+ *  This class implements a ServletContextListener and initializes 
+ *  config-bootstrapper upon servlet context initialization.<br/>
  * <br/>
  * 
  * <h1>Quick start</h1> 
@@ -94,11 +96,10 @@ import org.apache.log4j.xml.DOMConfigurator;
  *      Don't use this feature if you don't understand what it is, since it might clutter your system properties.<br/>
  *  </li>
  * </ul>
- * </p>
  * <br/>
  * 
  * <b>Finding correct application configuration</b><br/>
- * <p>
+ * <br/>
  * This context listener will in the given order look in the system properties, environment variables<br/>
  * or the servlet context parameters for the location of a configuration file to use in the application.<br/>
  * By default it will look for an entry with the key "application.config.location". (This key name can be overridden, see Overriding defaults below)<br/>
@@ -131,11 +132,9 @@ import org.apache.log4j.xml.DOMConfigurator;
  * <br/>
  * To use an external log4j file you will have to state the location of the file in the application configuration as 
  * a property with the key given by "application.log4j.config.location". (This key name can be overriden, see Overriding defaults below)<br/>
- * </p>
  * <br/>
  * <br/> 
  * <b>Usage</b><br/>
- * <p>
  * Add this to your web.xml and make sure it is located before any application specific listeners that need
  * to use the configuration location property or that needs to log. E.g. before Spring's ContextLoaderListener<br/>
  * <pre>
@@ -163,10 +162,9 @@ import org.apache.log4j.xml.DOMConfigurator;
  *  <br/>
  *  As a system property upon starting your container:<br/>
  *  <pre>java [your application] -Dapplication.config.location=file:/Users/myusername/my-app-config/app.properties</pre><br/>
- * </p>
+ * <br/>
  * <br/>
  * <b>Overriding defaults</b><br/>
- * <p>
  * The following context-parameters can be set to configure the listener.<br/>
  * All of them have default values so they don't have to be set if not needed<br/>
  * <pre>
@@ -205,7 +203,6 @@ import org.apache.log4j.xml.DOMConfigurator;
  *      &lt;param-value&gt;My Application&lt;/param-value&gt;
  *  &lt;/context-param&gt;
  *  </pre>
- *  </p>
  *  
  * @author Christian Hilmersson (https://github.com/chilmers/)
  */
