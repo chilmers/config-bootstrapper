@@ -126,6 +126,8 @@ import org.apache.log4j.xml.DOMConfigurator;
  * This mechanism configures Log4j using a given file whose location is stated in the application configuration, 
  * or if no such file is available falls back to Log4j's default configuration behavior, <br/>
  * i.e. looks for log4j.xml or log4j.properties on the classpath.<br/>
+ * Use this format classpath:my-log4j-config.xml to point out a file on the classpath.<br/>
+ * If you want to point out a file on the file system you can either prefix with file: or just write the location as it is. 
  * <br/>
  * To use an external log4j file you will have to state the location of the file in the application configuration as 
  * a property with the key given by "application.log4j.config.location". (This key name can be overriden, see Overriding defaults below)<br/>
@@ -486,10 +488,25 @@ public class ConfigServletContextListener implements ServletContextListener {
             LogManager.resetConfiguration();
             logToSystemOut("Found log4j configuration location in the application configuration. " +
             		"Configuring logger using file: " + log4jConfigLocation);
+            if (log4jConfigLocation.startsWith("file:")) {
+                log4jConfigLocation = log4jConfigLocation.replaceFirst("file:", "");
+            }
             if (log4jConfigLocation.endsWith(".xml")) {
-                DOMConfigurator.configureAndWatch(log4jConfigLocation);
+                if (log4jConfigLocation.startsWith("classpath:")) {
+                    log4jConfigLocation = log4jConfigLocation.replaceFirst("classpath:", "");
+                    InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(log4jConfigLocation);
+                    new DOMConfigurator().doConfigure(is, LogManager.getLoggerRepository());
+                } else {
+                    DOMConfigurator.configureAndWatch(log4jConfigLocation);
+                }
             } else if (log4jConfigLocation.endsWith(".properties")) {
-                PropertyConfigurator.configureAndWatch(log4jConfigLocation);
+                if (log4jConfigLocation.startsWith("classpath:")) {
+                    log4jConfigLocation = log4jConfigLocation.replaceFirst("classpath:", "");
+                    InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(log4jConfigLocation);
+                    PropertyConfigurator.configure(is);
+                } else {
+                    PropertyConfigurator.configureAndWatch(log4jConfigLocation);
+                }
             } else {
                 logToSystemOut("The log4j configuration file location must end with .xml or .properties. " +
                 		"\nFalling back to the default log4j configuration mechanism.");
