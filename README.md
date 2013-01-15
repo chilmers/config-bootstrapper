@@ -7,7 +7,7 @@ Config-bootsrapper is licensed under LGPL 2.1 as described in the LICENSE file.
 
 <a href="http://htmlpreview.github.com/?https://raw.github.com/chilmers/config-bootstrapper/master/target/site/apidocs/com/chilmers/configbootstrapper/ConfigServletContextListener.html">Link to documentation</a>
 
-<div>
+<div class="block">
  Helps initializing logging and application configuration for a system.<br/>
  <br/>
  
@@ -61,11 +61,11 @@ Config-bootsrapper is licensed under LGPL 2.1 as described in the LICENSE file.
       Don't use this feature if you don't understand what it is, since it might clutter your system properties.<br/>
   </li>
  </ul>
- </p>
+ 
  <br/>
  
  <b>Finding correct application configuration</b><br/>
- <p>
+ 
  This context listener will in the given order look in the system properties, environment variables<br/>
  or the servlet context parameters for the location of a configuration file to use in the application.<br/>
  By default it will look for an entry with the key "application.config.location". (This key name can be overridden, see Overriding defaults below)<br/>
@@ -93,14 +93,16 @@ Config-bootsrapper is licensed under LGPL 2.1 as described in the LICENSE file.
  This mechanism configures Log4j using a given file whose location is stated in the application configuration, 
  or if no such file is available falls back to Log4j's default configuration behavior, <br/>
  i.e. looks for log4j.xml or log4j.properties on the classpath.<br/>
+ Use this format classpath:my-log4j-config.xml to point out a file on the classpath.<br/>
+ If you want to point out a file on the file system you can either prefix with file: or just write the location as it is. 
  <br/>
  To use an external log4j file you will have to state the location of the file in the application configuration as 
  a property with the key given by "application.log4j.config.location". (This key name can be overriden, see Overriding defaults below)<br/>
- </p>
+ 
  <br/>
  <br/> 
  <b>Usage</b><br/>
- <p>
+ 
  Add this to your web.xml and make sure it is located before any application specific listeners that need
  to use the configuration location property or that needs to log. E.g. before Spring's ContextLoaderListener<br/>
  <pre>
@@ -128,10 +130,10 @@ Config-bootsrapper is licensed under LGPL 2.1 as described in the LICENSE file.
   <br/>
   As a system property upon starting your container:<br/>
   <pre>java [your application] -Dapplication.config.location=file:/Users/myusername/my-app-config/app.properties</pre><br/>
- </p>
+ 
  <br/>
  <b>Overriding defaults</b><br/>
- <p>
+ 
  The following context-parameters can be set to configure the listener.<br/>
  All of them have default values so they don't have to be set if not needed<br/>
  <pre>
@@ -170,7 +172,7 @@ Config-bootsrapper is licensed under LGPL 2.1 as described in the LICENSE file.
       &lt;param-value&gt;My Application&lt;/param-value&gt;
   &lt;/context-param&gt;
   </pre>
-  </p></div>
+</div>
 <dl><dt><span class="strong">Author:</span></dt>
   <dd>Christian Hilmersson (https://github.com/chilmers/)</dd></dl>
 </li>
