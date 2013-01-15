@@ -80,8 +80,7 @@ Add the following dependency to your pom.xml to get the latest version from Mave
       the system properties.<br>
       Example:
       <br>
-      <pre>          system.property.foo=bar
-      </pre>
+<pre>system.property.foo=bar</pre>
       Will write <tt>foo=bar</tt> as a system property, which is handy in some circumstances.<br>
       Don't use this feature if you don't understand what it is, since it might clutter your system properties.<br>
   </li>
@@ -99,14 +98,11 @@ Add the following dependency to your pom.xml to get the latest version from Mave
  This makes it possible to locate the configuration from within the application, for example by reading it into a 
  PropertyResourceBundle or by using Spring's PropertyPlaceholderConfigurer like this:
  <br>
-  <pre>  
-  &lt;bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"&gt;
+<pre>&lt;bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"&gt;
       &lt;property name="location" value="${application.config.location}" /&gt;
-  &lt;/bean&gt;
-  </pre>
+&lt;/bean&gt;</pre>
   Or, if you have the context namespace defined, simply:<br>
-  <pre>  &lt;context:property-placeholder location="${application.config.location}"/&gt;
-  </pre>
+<pre>&lt;context:property-placeholder location="${application.config.location}"/&gt;</pre>
   Or use readApplicationConfiguration in ConfigHelper for non-Spring applications:<br>
   See <a href="../../../com/chilmers/configbootstrapper/ConfigHelper.html#readApplicationConfiguration()"><code>ConfigHelper.readApplicationConfiguration()</code></a>
  <br>
@@ -125,65 +121,64 @@ Add the following dependency to your pom.xml to get the latest version from Mave
  <h2>Usage</h2>
  Add this to your web.xml and make sure it is located before any application specific listeners that need
  to use the configuration location property or that needs to log. E.g. before Spring's ContextLoaderListener<br>
- <pre>  &lt;listener&gt;
-      &lt;listener-class&gt;com.chilmers.configbootstrapper.ConfigServletContextListener&lt;/listener-class&gt;
-  &lt;/listener&gt;
- </pre>
+<pre>&lt;listener&gt;
+	&lt;listener-class&gt;com.chilmers.configbootstrapper.ConfigServletContextListener&lt;/listener-class&gt;
+&lt;/listener&gt;</pre>
  
  If you want to specify an external configuration file (instead of the default "classpath:application.properties"), <br>
  add a context-param or more likely a system property or environment variable stating the location of your application configuration. <br> 
  For example:<br>
  <br>
   As context param:<br>
-  <pre>  &lt;context-param&gt;
+<pre>&lt;context-param&gt;
       &lt;description&gt;The location of the application configuration. 
           If not set it defaults to classpath:application.properties&lt;/description&gt;
       &lt;param-name&gt;application.config.location&lt;/param-name&gt;
       &lt;param-value&gt;file:/Users/myusername/my-app-config/app.properties&lt;/param-value&gt;
-  &lt;/context-param&gt;
-  </pre>
+&lt;/context-param&gt;
+</pre>
  <br>
   As environment variable in a bash shell:<br>
-  <pre>export application.config.location=file:/Users/myusername/my-app-config/app.properties</pre>
+<pre>export application.config.location=file:/Users/myusername/my-app-config/app.properties</pre>
   <br>
   As a system property upon starting your container:<br>
-  <pre>java [your application] -Dapplication.config.location=file:/Users/myusername/my-app-config/app.properties</pre>
+<pre>java [your application] -Dapplication.config.location=file:/Users/myusername/my-app-config/app.properties</pre>
 <br>
  <h2>Overriding defaults</h2>
  The following context-parameters can be set to configure the listener.<br>
  All of them have default values so they don't have to be set if not needed<br>
- <pre>  &lt;context-param&gt;
+<pre>&lt;context-param&gt;
       &lt;description&gt;Sets the key for the entry that holds the application configuration location. 
           If not set it defaults to application.config.location&lt;/description&gt;
       &lt;param-name&gt;configServletContextListener.configLocationPropertyKey&lt;/param-name&gt;
       &lt;param-value&gt;myown.config.location&lt;/param-value&gt;
-  &lt;/context-param&gt;
-  </pre>
- <pre>  &lt;context-param&gt;
+&lt;/context-param&gt;
+</pre>
+<pre>&lt;context-param&gt;
       &lt;description&gt;Sets the key for where in the application configuration file to look for a log4j
           configuration file location.
           If not set it defaults to application.log4j.config.location&lt;/description&gt;
       &lt;param-name&gt;configServletContextListener.log4jConfigLocationPropertyKey&lt;/param-name&gt;
       &lt;param-value&gt;myown.log4j.config.location&lt;/param-value&gt;
-  &lt;/context-param&gt;
-  </pre>
- <pre>  &lt;context-param&gt;
+&lt;/context-param&gt;
+</pre>
+<pre>&lt;context-param&gt;
       &lt;description&gt;Sets the location of the application configuration to fall back to if no other configuration
           file location was set. E.g. a bundled configuration on the classpath. 
           If not set it defaults to classpath:application.properties&lt;/description&gt;
       &lt;param-name&gt;configServletContextListener.fallbackConfigLocation&lt;/param-name&gt;
       &lt;param-value&gt;classpath:myown.properties&lt;/param-value&gt;
-  &lt;/context-param&gt;
-  </pre>
- <pre>  &lt;context-param&gt;
+&lt;/context-param&gt;
+</pre>
+<pre>&lt;context-param&gt;
       &lt;description&gt;
       Application name that is printed when using System.out logging when no logging manager is available.
       Defaults to the display-name of the web.xml or if no display-name exists it will be ConfigServletContextListener
       &lt;/description&gt;
       &lt;param-name&gt;configServletContextListener.applicationName&lt;/param-name&gt;
       &lt;param-value&gt;My Application&lt;/param-value&gt;
-  &lt;/context-param&gt;
-  </pre></div>
+&lt;/context-param&gt;
+</pre></div>
 
 <h2>License</h2>
 Config-bootsrapper is licensed under LGPL 2.1 as described in the LICENSE file. <br>
