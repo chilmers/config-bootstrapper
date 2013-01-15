@@ -12,7 +12,7 @@
 
 	<groupId>com.chilmers.config-bootstrapper</groupId>
     <artifactId>config-bootstrapper-project</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     
     <name>config-bootstrapper-project</name>
