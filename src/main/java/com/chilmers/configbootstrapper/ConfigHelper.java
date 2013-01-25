@@ -32,7 +32,7 @@ public class ConfigHelper {
     
     /**
      * Used for reading the application from it's location after initialization is done
-     * suing the default application config location key.
+     * using the default application config location key.
      * See {@link ConfigServletContextListener#DEFAULT_CONFIG_LOCATION_PROPERTY_KEY}
      * @return A property resource bundle holding the current configuration.
      */
