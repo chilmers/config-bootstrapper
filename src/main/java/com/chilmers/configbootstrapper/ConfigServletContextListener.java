@@ -397,47 +397,10 @@ public class ConfigServletContextListener implements ServletContextListener {
     }
     
     protected void setSystemProperty(String key, String value){
-        logToSystemOut("Setting system property " + key + " " +
-                "to the following value: " + value);
+        logToSystemOut("Setting system property " + key);
         System.setProperty(key, value);
     }
-    
-    /**
-     * Reads the application configuration file  
-     * 
-     * @param applicationConfigLocation The location of the application configuration
-     * @return application configuration properties
-     */
-//    protected PropertyResourceBundle getApplicationConfiguration(String applicationConfigLocation) {
-//        InputStream is = null;
-//        try {
-//            if (applicationConfigLocation.startsWith("classpath:")) {
-//                applicationConfigLocation = applicationConfigLocation.replaceFirst("classpath:", "");
-//                is = Thread.currentThread().getContextClassLoader().getResourceAsStream(applicationConfigLocation); 
-//            } else if (applicationConfigLocation.startsWith("file:")) {
-//                applicationConfigLocation = applicationConfigLocation.replaceFirst("file:", "");
-//                is = new FileInputStream(applicationConfigLocation);    
-//            } else {
-//                logToSystemOut("The application configuration location must start with file: or classpath:");
-//            }
-//            return new PropertyResourceBundle(is);
-//            
-//        } catch (Exception e) {
-//            logToSystemOut("There was a problem reading the application configuration at location: " 
-//                    + applicationConfigLocation +"\n"
-//                    + "Exception:" + e.getClass().toString() + "\n"
-//                    + "Message:" + e.getMessage());
-//        } finally {
-//            try {
-//                is.close();
-//            } catch (Exception e) {
-//                logToSystemOut("WARNING! Exception while trying to close configuration file.\n"
-//                        + "Exception:" + e.getClass().toString() + "\n"
-//                        + "Message:" + e.getMessage());
-//            }
-//        }
-//        return null;
-//    }
+
 
     /**
      * Loads system properties from the application configuration
