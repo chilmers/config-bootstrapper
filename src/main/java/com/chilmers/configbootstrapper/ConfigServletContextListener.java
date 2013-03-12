@@ -21,10 +21,7 @@
 
 package com.chilmers.configbootstrapper;
 
-import java.io.FileInputStream;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
@@ -318,6 +315,8 @@ public class ConfigServletContextListener implements ServletContextListener {
      */
     private String applicationName;
     
+    private ConfigHelper configHelper;
+    
     /**
      * Configures the when the servlet context is initialized.
      * {@inheritDoc} 
@@ -332,7 +331,7 @@ public class ConfigServletContextListener implements ServletContextListener {
         }
         setSystemProperty(this.configLocationPropertyKey, configLocation);        
         
-        PropertyResourceBundle config = getApplicationConfiguration(configLocation);
+        PropertyResourceBundle config = configHelper.getApplicationConfiguration(configLocation);
         if(config != null){
             loadApplicationConfigurationSystemProperties(config);
             loadLoggingConfiguration(config);    
@@ -359,17 +358,7 @@ public class ConfigServletContextListener implements ServletContextListener {
         if (StringUtils.isBlank(this.applicationName)) {
             this.applicationName = DEFAULT_APPLICATION_NAME;
         }
-    }
-    
-    /**
-     * Helper method that logs to System.out.
-     * Good to have before and after the logging framework is configured
-     * and after it has been shut down. 
-     * @param text the text to log to System.out
-     */
-    private void logToSystemOut(String text) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-        System.out.println(sdf.format(new Date()) + " [" + applicationName + "] " + text);
+        configHelper = new ConfigHelper(applicationName);
     }
     
     /**
@@ -398,6 +387,15 @@ public class ConfigServletContextListener implements ServletContextListener {
         return configLocation;
     }
     
+    /**
+     * Short hand for ConfigHelper#logToSystemOut
+     * @see ConfigHelper#logToSystemOut(String) 
+     * @param text the text to log to System.out
+     */
+    private void logToSystemOut(String text) {
+        configHelper.logToSystemOut(text);
+    }
+    
     protected void setSystemProperty(String key, String value){
         logToSystemOut("Setting system property " + key + " " +
                 "to the following value: " + value);
@@ -410,36 +408,36 @@ public class ConfigServletContextListener implements ServletContextListener {
      * @param applicationConfigLocation The location of the application configuration
      * @return application configuration properties
      */
-    protected PropertyResourceBundle getApplicationConfiguration(String applicationConfigLocation) {
-        InputStream is = null;
-        try {
-            if (applicationConfigLocation.startsWith("classpath:")) {
-                applicationConfigLocation = applicationConfigLocation.replaceFirst("classpath:", "");
-                is = Thread.currentThread().getContextClassLoader().getResourceAsStream(applicationConfigLocation); 
-            } else if (applicationConfigLocation.startsWith("file:")) {
-                applicationConfigLocation = applicationConfigLocation.replaceFirst("file:", "");
-                is = new FileInputStream(applicationConfigLocation);    
-            } else {
-                logToSystemOut("The application configuration location must start with file: or classpath:");
-            }
-            return new PropertyResourceBundle(is);
-            
-        } catch (Exception e) {
-            logToSystemOut("There was a problem reading the application configuration at location: " 
-                    + applicationConfigLocation +"\n"
-                    + "Exception:" + e.getClass().toString() + "\n"
-                    + "Message:" + e.getMessage());
-        } finally {
-            try {
-                is.close();
-            } catch (Exception e) {
-                logToSystemOut("WARNING! Exception while trying to close configuration file.\n"
-                        + "Exception:" + e.getClass().toString() + "\n"
-                        + "Message:" + e.getMessage());
-            }
-        }
-        return null;
-    }
+//    protected PropertyResourceBundle getApplicationConfiguration(String applicationConfigLocation) {
+//        InputStream is = null;
+//        try {
+//            if (applicationConfigLocation.startsWith("classpath:")) {
+//                applicationConfigLocation = applicationConfigLocation.replaceFirst("classpath:", "");
+//                is = Thread.currentThread().getContextClassLoader().getResourceAsStream(applicationConfigLocation); 
+//            } else if (applicationConfigLocation.startsWith("file:")) {
+//                applicationConfigLocation = applicationConfigLocation.replaceFirst("file:", "");
+//                is = new FileInputStream(applicationConfigLocation);    
+//            } else {
+//                logToSystemOut("The application configuration location must start with file: or classpath:");
+//            }
+//            return new PropertyResourceBundle(is);
+//            
+//        } catch (Exception e) {
+//            logToSystemOut("There was a problem reading the application configuration at location: " 
+//                    + applicationConfigLocation +"\n"
+//                    + "Exception:" + e.getClass().toString() + "\n"
+//                    + "Message:" + e.getMessage());
+//        } finally {
+//            try {
+//                is.close();
+//            } catch (Exception e) {
+//                logToSystemOut("WARNING! Exception while trying to close configuration file.\n"
+//                        + "Exception:" + e.getClass().toString() + "\n"
+//                        + "Message:" + e.getMessage());
+//            }
+//        }
+//        return null;
+//    }
 
     /**
      * Loads system properties from the application configuration

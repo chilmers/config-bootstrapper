@@ -21,14 +21,19 @@ package com.chilmers.configbootstrapper;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.PropertyResourceBundle;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 
 public class ConfigHelper {
-
-    private static final Logger log = Logger.getLogger(ConfigHelper.class);
+    
+    private String applicationName;
+    
+    public ConfigHelper(String applicationName) {
+        this.applicationName = applicationName;
+    }
     
     /**
      * Used for reading the application from it's location after initialization is done
@@ -53,18 +58,25 @@ public class ConfigHelper {
             propertyKey = ConfigServletContextListener.DEFAULT_CONFIG_LOCATION_PROPERTY_KEY;
         }
         String applicationConfigLocation = System.getProperty(propertyKey);
+        return new ConfigHelper("config-bootstrapper").getApplicationConfiguration(applicationConfigLocation);       
+    }
+    
+    public PropertyResourceBundle getApplicationConfiguration(String applicationConfigLocation) {
         InputStream is = null;
         try {
             if (applicationConfigLocation.startsWith("classpath:")) {
                 applicationConfigLocation = applicationConfigLocation.replaceFirst("classpath:", "");
                 is = Thread.currentThread().getContextClassLoader().getResourceAsStream(applicationConfigLocation); 
-            } else {
+            } else if (applicationConfigLocation.startsWith("file:")) {
+                applicationConfigLocation = applicationConfigLocation.replaceFirst("file:", "");
                 is = new FileInputStream(applicationConfigLocation);    
+            } else {
+                logToSystemOut("The application configuration location must start with file: or classpath:");
             }
             return new PropertyResourceBundle(is);
             
         } catch (Exception e) {
-            log.error("There was a problem reading the application configuration at location: " 
+            logToSystemOut("There was a problem reading the application configuration at location: " 
                     + applicationConfigLocation +"\n"
                     + "Exception:" + e.getClass().toString() + "\n"
                     + "Message:" + e.getMessage());
@@ -72,12 +84,23 @@ public class ConfigHelper {
             try {
                 is.close();
             } catch (Exception e) {
-                log.error("WARNING! Exception while trying to close configuration file.\n"
+                logToSystemOut("WARNING! Exception while trying to close configuration file.\n"
                         + "Exception:" + e.getClass().toString() + "\n"
                         + "Message:" + e.getMessage());
             }
         }
-        return null;        
+        return null;
+    }
+    
+    /**
+     * Helper method that logs to System.out.
+     * Good to have before and after the logging framework is configured
+     * and after it has been shut down. 
+     * @param text the text to log to System.out
+     */
+    public void logToSystemOut(String text) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        System.out.println(sdf.format(new Date()) + " [" + applicationName + "] " + text);
     }
     
 }
