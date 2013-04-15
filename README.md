@@ -17,7 +17,7 @@ Add the following dependency to your pom.xml to get the latest version from Mave
 	&lt;dependency&gt;
 		&lt;groupId&gt;com.chilmers.config-bootstrapper&lt;/groupId&gt;
 		&lt;artifactId&gt;config-bootstrapper&lt;/artifactId&gt;
-		&lt;version&gt;1.2&lt;/version&gt;
+		&lt;version&gt;1.3&lt;/version&gt;
 	&lt;/dependency&gt;
 </pre>
 
